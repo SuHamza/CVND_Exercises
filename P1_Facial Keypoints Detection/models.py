@@ -30,8 +30,14 @@ class Net(nn.Module):
         # Output Size = ((W - F) / S) + 1 = (53 - 5)/1 + 1 = 49 => (128, 49, 49)
         # After Pooling Output => (128, 24, 24)
         self.conv3 = nn.Conv2d(64, 128, 5)
-        # Fully-Connected Layer
-        self.fc = nn.Linear(128*24*24, 136)
+        # Output Size = ((W - F) / S) + 1 = (24 - 5)/1 + 1 = 20 => (256, 20, 20)
+        # After Pooling Output => (256, 10, 10)
+        self.conv4 = nn.Conv2d(128, 256, 5)
+        
+        # Fully-Connected Layers
+        self.fc1 = nn.Linear(256*10*10, 3000)
+        self.fc2 = nn.Linear(3000, 1000)
+        self.fc3 = nn.Linear(1000, 136)
         
         # MaxPool Layer
         self.pool = nn.MaxPool2d(2, 2)
@@ -49,9 +55,12 @@ class Net(nn.Module):
         x = self.pool(F.relu(self.conv1(x)))
         x = self.pool(F.relu(self.conv2(x)))
         x = self.pool(F.relu(self.conv3(x)))
+        x = self.pool(F.relu(self.conv4(x)))
         ## Flattening
         x = x.view(x.size(0), -1)
-        x = self.fc(x)
+        x = self.dropout(F.relu(self.fc1(x)))
+        x = self.dropout(F.relu(self.fc2(x)))
+        x = self.fc3(x)
         x = F.log_softmax(x, dim=1)
         
         # a modified x, having gone through all the layers of your model, should be returned
