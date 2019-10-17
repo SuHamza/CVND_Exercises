@@ -61,7 +61,7 @@ class Net(nn.Module):
         x = self.dropout(F.relu(self.fc1(x)))
         x = self.dropout(F.relu(self.fc2(x)))
         x = self.fc3(x)
-        x = F.log_softmax(x, dim=1)
+        #x = F.log_softmax(x, dim=1)
         
         # a modified x, having gone through all the layers of your model, should be returned
         return x
