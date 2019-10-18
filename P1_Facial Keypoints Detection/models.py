@@ -20,22 +20,22 @@ class Net(nn.Module):
         ## Input Image Size = 224 x 224
         
         # As an example, you've been given a convolutional layer, which you may (but don't have to) change:
-        # 1 input image channel (grayscale), 32 output channels/feature maps, 5x5 square convolution kernel
-        # Output Size = ((W - F) / S) + 1 = (224 - 5) / 1 + 1 = 220 => (32, 220, 220)
+        # 1 input image channel (grayscale), 32 output channels/feature maps, 4x4 square convolution kernel
+        # Output Size = ((W - F) / S) + 1 = (224 - 4) / 1 + 1 = 220 => (32, 221, 221)
         # After Pooling Output => (32, 110, 110)
-        self.conv1 = nn.Conv2d(1, 32, 5)
-        # Output Size = ((W - F) / S) + 1 = (110 - 5) /1 + 1 = 106 => (64, 106, 106)
-        # After Pooling Output => (64, 53, 53)
-        self.conv2 = nn.Conv2d(32, 64, 5)
-        # Output Size = ((W - F) / S) + 1 = (53 - 5)/1 + 1 = 49 => (128, 49, 49)
-        # After Pooling Output => (128, 24, 24)
-        self.conv3 = nn.Conv2d(64, 128, 5)
-        # Output Size = ((W - F) / S) + 1 = (24 - 5)/1 + 1 = 20 => (256, 20, 20)
-        # After Pooling Output => (256, 10, 10)
-        self.conv4 = nn.Conv2d(128, 256, 5)
+        self.conv1 = nn.Conv2d(1, 32, 4)
+        # Output Size = ((W - F) / S) + 1 = (110 - 3) /1 + 1 = 106 => (64, 108, 108)
+        # After Pooling Output => (64, 54, 54)
+        self.conv2 = nn.Conv2d(32, 64, 3)
+        # Output Size = ((W - F) / S) + 1 = (54 - 2)/1 + 1 = 53 => (128, 53, 53)
+        # After Pooling Output => (128, 26, 26)
+        self.conv3 = nn.Conv2d(64, 128, 2)
+        # Output Size = ((W - F) / S) + 1 = (26 - 1)/1 + 1 = 20 => (256, 26, 26)
+        # After Pooling Output => (256, 13, 13)
+        self.conv4 = nn.Conv2d(128, 256, 1)
         
         # Fully-Connected Layers
-        self.fc1 = nn.Linear(256*10*10, 3000)
+        self.fc1 = nn.Linear(256*13*13, 3000)
         self.fc2 = nn.Linear(3000, 1000)
         self.fc3 = nn.Linear(1000, 136)
         
