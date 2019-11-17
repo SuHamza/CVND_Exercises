@@ -61,4 +61,15 @@ class DecoderRNN(nn.Module):
 
     def sample(self, inputs, states=None, max_len=20):
         " accepts pre-processed image tensor (inputs) and returns predicted sentence (list of tensor ids of length max_len) "
-        pass
+        # List of predicted IDs
+        preds = []        
+        for i in range(max_len):
+            hiddens, states = self.lstm(inputs, states)
+            outputs = self.linear(hiddens.squeeze(1))
+            # Getting maximum probabilities using Greedy Search
+            _, predicted = outputs.max(1)
+            # Append prediction with max. prob. to predicted IDs list
+            preds.append(predicted.item())
+            inputs = self.word_embeddings(predicted).unsqueeze(1)
+            
+        return preds
